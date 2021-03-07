@@ -1,20 +1,21 @@
-{-# LANGUAGE DeriveFunctor     #-}
-{-# LANGUAGE OverloadedStrings #-}
 {-# LANGUAGE CPP #-}
+{-# LANGUAGE DeriveFunctor #-}
+{-# LANGUAGE OverloadedStrings #-}
+
 module Telegram.Bot.Simple.UpdateParser where
 
-import           Control.Applicative
-import           Control.Monad.Reader
-import           Data.Monoid          ((<>))
-import           Data.Text            (Text)
-import qualified Data.Text            as Text
-import           Text.Read            (readMaybe)
-
-import           Telegram.Bot.API
+import Control.Applicative
+import Control.Monad.Reader
+import Data.Monoid ((<>))
+import Data.Text (Text)
+import qualified Data.Text as Text
+import Telegram.Bot.API
+import Text.Read (readMaybe)
 
 newtype UpdateParser a = UpdateParser
   { runUpdateParser :: Update -> Maybe a
-  } deriving (Functor)
+  }
+  deriving (Functor)
 
 instance Applicative UpdateParser where
   pure x = UpdateParser (pure (pure x))
@@ -27,6 +28,7 @@ instance Alternative UpdateParser where
 instance Monad UpdateParser where
   return = pure
   UpdateParser x >>= f = UpdateParser (\u -> x u >>= flip runUpdateParser u . f)
+
 #if !MIN_VERSION_base(4,13,0)
   fail _ = empty
 #endif
@@ -56,8 +58,9 @@ command :: Text -> UpdateParser Text
 command name = do
   t <- text
   case Text.words t of
-    (w:ws) | w == "/" <> name
-      -> pure (Text.unwords ws)
+    (w : ws)
+      | w == "/" <> name ->
+        pure (Text.unwords ws)
     _ -> fail "not that command"
 
 callbackQueryDataRead :: Read a => UpdateParser a

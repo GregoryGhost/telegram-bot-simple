@@ -1,24 +1,21 @@
-module Telegram.Bot.Simple.BotApp (
-  BotApp(..),
-  BotJob(..),
+module Telegram.Bot.Simple.BotApp
+  ( BotApp (..),
+    BotJob (..),
+    startBot,
+    startBot_,
+    startBotAsync,
+    startBotAsync_,
+    getEnvToken,
+  )
+where
 
-  startBot,
-  startBot_,
-
-  startBotAsync,
-  startBotAsync_,
-
-  getEnvToken,
-) where
-
-import           Control.Concurrent                  (forkIO)
-import           Control.Monad                       (void)
-import           Data.String                         (fromString)
-import           Servant.Client
-import           System.Environment                  (getEnv)
-
-import qualified Telegram.Bot.API                    as Telegram
-import           Telegram.Bot.Simple.BotApp.Internal
+import Control.Concurrent (forkIO)
+import Control.Monad (void)
+import Data.String (fromString)
+import Servant.Client
+import System.Environment (getEnv)
+import qualified Telegram.Bot.API as Telegram
+import Telegram.Bot.Simple.BotApp.Internal
 
 -- | Start bot with asynchronous polling.
 -- The result is a function that allows you to send actions

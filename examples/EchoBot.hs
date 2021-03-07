@@ -1,12 +1,12 @@
 {-# LANGUAGE OverloadedStrings #-}
+
 module Main where
 
-import           Data.Text                        (Text)
-import qualified Data.Text                        as Text
-
-import           Telegram.Bot.API
-import           Telegram.Bot.Simple
-import           Telegram.Bot.Simple.UpdateParser (updateMessageText)
+import Data.Text (Text)
+import qualified Data.Text as Text
+import Telegram.Bot.API
+import Telegram.Bot.Simple
+import Telegram.Bot.Simple.UpdateParser (updateMessageText)
 
 type Model = ()
 
@@ -15,18 +15,19 @@ data Action
   | Echo Text
 
 echoBot :: BotApp Model Action
-echoBot = BotApp
-  { botInitialModel = ()
-  , botAction = updateToAction
-  , botHandler = handleAction
-  , botJobs = []
-  }
+echoBot =
+  BotApp
+    { botInitialModel = (),
+      botAction = updateToAction,
+      botHandler = handleAction,
+      botJobs = []
+    }
 
 updateToAction :: Update -> Model -> Maybe Action
 updateToAction update _ =
   case updateMessageText update of
     Just text -> Just (Echo text)
-    Nothing   -> Nothing
+    Nothing -> Nothing
 
 handleAction :: Action -> Model -> Eff Action Model
 handleAction action model = case action of
