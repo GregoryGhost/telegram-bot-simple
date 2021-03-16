@@ -4,15 +4,20 @@
 {-# LANGUAGE OverloadedStrings #-}
 {-# LANGUAGE TemplateHaskell #-}
 {-# LANGUAGE TypeApplications #-}
+{-# LANGUAGE TypeOperators #-}
 
 module Telegram.Bot.API.InlineMode where
 
-import Data.Aeson (FromJSON (..), ToJSON (..))
+import Data.Aeson
 import Data.Hashable (Hashable)
 import Data.Int (Int32, Int64)
+import Data.Proxy
 import Data.Text (Text, pack)
 import GHC.Generics (Generic)
+import Servant.API
+import Servant.Client hiding (Response)
 import Telegram.Bot.API.Internal.Utils
+import Telegram.Bot.API.MakingRequests
 import Telegram.Bot.API.Types
 
 newtype InlineQueryId = InlineQueryId Int32
@@ -54,9 +59,19 @@ data ChosenInlineResult
       }
   deriving (Generic, Show)
 
--- | TODO
-data AnswerInlineQuery
-  = AnswerInlineQuery
+type AnswerInlineQuery =
+  "answerInlineQuery"
+    :> ReqBody '[JSON] AnswerInlineRequest
+    :> Post '[JSON] (Response Bool)
+
+-- | Use this method to send answers to an inline query.
+-- No more than 50 results per query are allowed.
+answerInlineQuery :: AnswerInlineRequest -> ClientM (Response Bool)
+answerInlineQuery = client (Proxy @AnswerInlineQuery)
+
+-- | Answer on an inline query.
+data AnswerInlineRequest
+  = AnswerInlineRequest
       { -- | Unique identifier for the answered query.
         answerInlineQueryInlineQueryId :: InlineQueryId,
         -- | A JSON-serialized array of results for the inline query
@@ -124,7 +139,7 @@ deriveJSON' ''InlineQuery
 
 deriveJSON' ''ChosenInlineResult
 
-deriveJSON' ''AnswerInlineQuery
+deriveJSON' ''AnswerInlineRequest
 
 deriveJSON' ''InlineQueryResult
 
