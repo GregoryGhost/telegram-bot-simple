@@ -17,6 +17,7 @@ import Servant.Client hiding (Response)
 import Telegram.Bot.API.Internal.Utils
 import Telegram.Bot.API.MakingRequests
 import Telegram.Bot.API.Types
+import Telegram.Bot.API.InlineMode
 
 -- ** 'Update'
 
@@ -36,9 +37,10 @@ data Update = Update
     updateChannelPost :: Maybe Message,
     -- | New version of a channel post that is known to the bot and was edited
     updateEditedChannelPost :: Maybe Message,
-    --  , updateInlineQuery :: Maybe InlineQuery -- ^ New incoming inline query
-    --   , updateChosenInlineResult :: Maybe ChosenInlineResult -- ^ The result of an inline query that was chosen by a user and sent to their chat partner. Please see our documentation on the feedback collecting for details on how to enable these updates for your bot.
-
+    -- | New incoming inline query
+    updateInlineQuery :: Maybe InlineQuery,
+    -- | The result of an inline query that was chosen by a user and sent to their chat partner. Please see our documentation on the feedback collecting for details on how to enable these updates for your bot.
+    updateChosenInlineResult :: Maybe ChosenInlineResult,
     -- | New incoming callback query
     updateCallbackQuery :: Maybe CallbackQuery
   }

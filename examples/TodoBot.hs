@@ -50,8 +50,9 @@ todoBot3 =
   where
     updateToAction :: Model -> Update -> Maybe Action
     updateToAction _ =
-      parseUpdate $
-        AddItem <$> plainText
+      parseUpdate $ test
+      where
+        test = AddItem <$> plainText
           <|> Start <$ command "start"
           <|> AddItem <$> command "add"
           <|> RemoveItem <$> command "remove"
