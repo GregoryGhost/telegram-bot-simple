@@ -7,6 +7,7 @@
 
 module Telegram.Bot.API.GettingUpdates where
 
+import Control.Applicative ((<|>))
 import Data.Aeson (FromJSON (..), ToJSON (..))
 import Data.Foldable (asum)
 import Data.Int (Int32)
@@ -54,6 +55,24 @@ instance FromJSON Update where parseJSON = gparseJSON
 
 updateChatId :: Update -> Maybe ChatId
 updateChatId = fmap (chatId . messageChat) . extractUpdateMessage
+
+newtype ConversationId = ConversationId Integer
+  deriving (Eq, Ord, Show, ToJSON, FromJSON)
+
+data ConvId = ConvChatId ChatId | ConvInlineQueryId InlineQueryId
+
+getConversationId :: Update -> Maybe ConversationId
+getConversationId update = 
+  getChatId <|> getInlineQueryId
+  >>= (Just . ConversationId . extractConversationId)
+  where
+    getChatId = (ConvChatId) <$> updateChatId update
+    getInlineQueryId = (ConvInlineQueryId) <$> inlineQueryId <$> inlineQuery
+    inlineQuery = updateInlineQuery update
+    extractConversationId cId =
+      case cId of
+        ConvChatId (ChatId vId) -> vId
+        ConvInlineQueryId (InlineQueryId vId) -> vId
 
 extractUpdateMessage :: Update -> Maybe Message
 extractUpdateMessage Update {..} =

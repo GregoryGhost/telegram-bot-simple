@@ -9,6 +9,7 @@
 module Telegram.Bot.API.InlineMode where
 
 import Data.Aeson
+import Data.Coerce (coerce)
 import Data.Hashable (Hashable)
 import Data.Int (Int32, Int64)
 import Data.Proxy
@@ -20,8 +21,11 @@ import Telegram.Bot.API.Internal.Utils
 import Telegram.Bot.API.MakingRequests
 import Telegram.Bot.API.Types
 
-newtype InlineQueryId = InlineQueryId Int32
+newtype InlineQueryId = InlineQueryId Integer
   deriving (Eq, Ord, Show, ToJSON, FromJSON)
+
+instance ToHttpApiData InlineQueryId where
+  toUrlPiece a = pack . show @Integer $ coerce a
 
 -- | This object represents an incoming inline query.
 -- When the user sends an empty query, your bot could return some default or trending results.
