@@ -9,6 +9,7 @@ module Telegram.Bot.API.GettingUpdates where
 
 import Control.Applicative ((<|>))
 import Data.Aeson (FromJSON (..), ToJSON (..))
+import Data.Hashable (Hashable)
 import Data.Foldable (asum)
 import Data.Int (Int32)
 import Data.Proxy
@@ -57,7 +58,7 @@ updateChatId :: Update -> Maybe ChatId
 updateChatId = fmap (chatId . messageChat) . extractUpdateMessage
 
 newtype ConversationId = ConversationId Integer
-  deriving (Eq, Ord, Show, ToJSON, FromJSON)
+  deriving (Eq, Ord, Show, ToJSON, FromJSON, Hashable)
 
 data ConvId = ConvChatId ChatId | ConvInlineQueryId InlineQueryId
 

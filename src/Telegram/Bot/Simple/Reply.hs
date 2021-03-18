@@ -155,3 +155,35 @@ replyOrEdit emsg = do
   if uid == Just botUserId
     then editUpdateMessage emsg
     else reply (editMessageToReplyMessage emsg)
+
+toAnswerInlineQuery :: InlineQueryId -> [InlineQueryResult] -> AnswerInlineRequest
+toAnswerInlineQuery queryId answers =
+  AnswerInlineRequest
+    { answerInlineQueryInlineQueryId = queryId,
+      answerInlineQueryResults = answers,
+      answerInlineQueryCacheTime = Nothing,
+      answerInlineQueryIsPersonal = Nothing,
+      answerInlineQueryNextOffset = Nothing
+    }
+
+currentInlineQueryId :: BotM (Maybe InlineQueryId)
+currentInlineQueryId = do
+  mupdate <- asks botContextUpdate
+  pure $ getQueryId =<< mupdate
+  where
+    getQueryId mupdate = do
+      query <- updateInlineQuery mupdate
+      pure $ inlineQueryId query
+
+answerTo :: InlineQueryId -> [InlineQueryResult] -> BotM ()
+answerTo someInlineQueryId answerResult = do
+  let msg = toAnswerInlineQuery someInlineQueryId answerResult
+  void . liftClientM $ answerInlineQuery msg
+
+-- | Send answer on a inline query.
+answer :: [InlineQueryResult] -> BotM ()
+answer answers = do
+  mInlineQueryId <- currentInlineQueryId
+  case mInlineQueryId of
+    Just inlineQueryId -> answerTo inlineQueryId answers
+    Nothing -> liftIO $ putStrLn "No inline query to answer"
