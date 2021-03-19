@@ -9,17 +9,18 @@ module Telegram.Bot.API.GettingUpdates where
 
 import Control.Applicative ((<|>))
 import Data.Aeson (FromJSON (..), ToJSON (..))
-import Data.Hashable (Hashable)
 import Data.Foldable (asum)
+import Data.Hashable (Hashable)
 import Data.Int (Int32)
 import Data.Proxy
 import GHC.Generics (Generic)
 import Servant.API
 import Servant.Client hiding (Response)
+import Telegram.Bot.API.InlineMode
 import Telegram.Bot.API.Internal.Utils
 import Telegram.Bot.API.MakingRequests
+import Telegram.Bot.API.Methods
 import Telegram.Bot.API.Types
-import Telegram.Bot.API.InlineMode
 
 -- ** 'Update'
 
@@ -56,6 +57,14 @@ instance FromJSON Update where parseJSON = gparseJSON
 
 updateChatId :: Update -> Maybe ChatId
 updateChatId = fmap (chatId . messageChat) . extractUpdateMessage
+
+getConversationId :: Update -> Maybe SomeChatId
+getConversationId update = 
+  getChatId <|> getInlineQueryId
+  where
+    getChatId = (SomeChatId) <$> updateChatId update
+    getInlineQueryId = (SomeChatUsername) <$> inlineQueryId <$> inlineQuery
+    inlineQuery = updateInlineQuery update
 
 extractUpdateMessage :: Update -> Maybe Message
 extractUpdateMessage Update {..} =

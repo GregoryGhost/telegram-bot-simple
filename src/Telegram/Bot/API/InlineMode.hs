@@ -22,7 +22,7 @@ import Telegram.Bot.API.MakingRequests
 import Telegram.Bot.API.Types
 
 newtype InlineQueryId = InlineQueryId Text
-  deriving (Eq, Ord, Show, ToJSON, FromJSON)
+  deriving (Eq, Ord, Show, ToJSON, FromJSON, Hashable)
 
 -- | This object represents an incoming inline query.
 -- When the user sends an empty query, your bot could return some default or trending results.

@@ -5,12 +5,14 @@
 {-# LANGUAGE RecordWildCards #-}
 {-# LANGUAGE TypeApplications #-}
 {-# LANGUAGE TypeOperators #-}
+{-# LANGUAGE DeriveAnyClass #-}
 
 module Telegram.Bot.API.Methods where
 
 import Control.Monad.IO.Class
 import Data.Aeson
 import Data.Aeson.Text
+import Data.Hashable (Hashable)
 import Data.Bool
 import Data.Proxy
 import Data.Text (Text)
@@ -24,6 +26,7 @@ import System.FilePath
 import Telegram.Bot.API.Internal.Utils
 import Telegram.Bot.API.MakingRequests
 import Telegram.Bot.API.Types
+import Telegram.Bot.API.InlineMode
 
 -- * Available methods
 
@@ -77,8 +80,8 @@ data SomeChatId
   = -- | Unique chat ID.
     SomeChatId ChatId
   | -- | Username of the target channel.
-    SomeChatUsername Text
-  deriving (Generic)
+    SomeChatUsername InlineQueryId
+  deriving (Eq, Show, Generic, Hashable)
 
 instance ToJSON SomeChatId where toJSON = genericSomeToJSON
 
@@ -211,7 +214,7 @@ instance ToMultipart Tmp SendDocumentRequest where
         [ Input "document" $ T.pack $ "attach://file",
           Input "chat_id" $ case sendDocumentChatId of
             SomeChatId (ChatId chat_id) -> T.pack $ show chat_id
-            SomeChatUsername txt -> txt
+            SomeChatUsername (InlineQueryId inline_query_id) -> T.pack $ show inline_query_id
         ]
           <> ( (maybe id (\_ -> ((Input "thumb" "attach://thumb") :)) sendDocumentThumb)
                  $ (maybe id (\t -> ((Input "caption" t) :)) sendDocumentCaption)
