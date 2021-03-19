@@ -21,11 +21,8 @@ import Telegram.Bot.API.Internal.Utils
 import Telegram.Bot.API.MakingRequests
 import Telegram.Bot.API.Types
 
-newtype InlineQueryId = InlineQueryId Integer
+newtype InlineQueryId = InlineQueryId Text
   deriving (Eq, Ord, Show, ToJSON, FromJSON)
-
-instance ToHttpApiData InlineQueryId where
-  toUrlPiece a = pack . show @Integer $ coerce a
 
 -- | This object represents an incoming inline query.
 -- When the user sends an empty query, your bot could return some default or trending results.
