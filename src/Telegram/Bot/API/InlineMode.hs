@@ -93,7 +93,7 @@ data AnswerInlineRequest
 -- | This object represents one result of an inline query.
 data InlineQueryResult = Article InlineQueryResultArticle deriving (Generic, Show)
 
-newtype InlineQueryResultId = InlineQueryResultId Int64
+newtype InlineQueryResultId = InlineQueryResultId Text
   deriving (Eq, Ord, Show, ToJSON, FromJSON)
 
 -- | Represents a link to an article or web page.
