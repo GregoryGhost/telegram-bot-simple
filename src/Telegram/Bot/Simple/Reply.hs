@@ -156,14 +156,14 @@ replyOrEdit emsg = do
     then editUpdateMessage emsg
     else reply (editMessageToReplyMessage emsg)
 
-toAnswerInlineQuery :: InlineQueryId -> [InlineQueryResult] -> AnswerInlineRequest
+toAnswerInlineQuery :: InlineQueryId -> [InlineQueryResult] -> AnswerInlineResponse
 toAnswerInlineQuery queryId answers =
-  AnswerInlineRequest
-    { answerInlineQueryInlineQueryId = queryId,
-      answerInlineQueryResults = answers,
-      answerInlineQueryCacheTime = Nothing,
-      answerInlineQueryIsPersonal = Nothing,
-      answerInlineQueryNextOffset = Nothing
+  AnswerInlineResponse
+    { answerInlineResponseInlineQueryId = queryId,
+      answerInlineResponseResults = answers,
+      answerInlineResponseCacheTime = Nothing,
+      answerInlineResponseIsPersonal = Nothing,
+      answerInlineResponseNextOffset = Nothing
     }
 
 currentInlineQueryId :: BotM (Maybe InlineQueryId)

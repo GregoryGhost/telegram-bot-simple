@@ -62,31 +62,31 @@ data ChosenInlineResult
 
 type AnswerInlineQuery =
   "answerInlineQuery"
-    :> ReqBody '[JSON] AnswerInlineRequest
+    :> ReqBody '[JSON] AnswerInlineResponse
     :> Post '[JSON] (Response Bool)
 
 -- | Use this method to send answers to an inline query.
 -- No more than 50 results per query are allowed.
-answerInlineQuery :: AnswerInlineRequest -> ClientM (Response Bool)
+answerInlineQuery :: AnswerInlineResponse -> ClientM (Response Bool)
 answerInlineQuery = client (Proxy @AnswerInlineQuery)
 
 -- | Answer on an inline query.
-data AnswerInlineRequest
-  = AnswerInlineRequest
+data AnswerInlineResponse
+  = AnswerInlineResponse
       { -- | Unique identifier for the answered query.
-        answerInlineQueryInlineQueryId :: InlineQueryId,
+        answerInlineResponseInlineQueryId :: InlineQueryId,
         -- | A JSON-serialized array of results for the inline query
-        answerInlineQueryResults :: [InlineQueryResult],
+        answerInlineResponseResults :: [InlineQueryResult],
         -- | 	The maximum amount of time in seconds that the result of the inline query may be cached on the server. Defaults to __300__.
-        answerInlineQueryCacheTime :: Maybe Int32,
+        answerInlineResponseCacheTime :: Maybe Int32,
         -- | Pass True, if results may be cached on the server side only for the user that sent the query. By default, results may be returned to any user who sends the same query
-        answerInlineQueryIsPersonal :: Maybe Bool,
+        answerInlineResponseIsPersonal :: Maybe Bool,
         -- | Pass the offset that a client should send in the next query with the same text to receive more results. Pass an empty string if there are no more results or if you don't support pagination. Offset length can't exceed 64 bytes.
-        answerInlineQueryNextOffset :: Maybe Int32
+        answerInlineResponseNextOffset :: Maybe Int32
         -- -- |
-        -- answerInlineQuerySwitchPmText :: Maybe Text,
+        -- answerInlineResponseSwitchPmText :: Maybe Text,
         -- -- |
-        -- answerInlineQuerySwitchPmParameter :: Maybe Text
+        -- answerInlineResponseSwitchPmParameter :: Maybe Text
       }
   deriving (Generic, Show)
 
@@ -140,7 +140,7 @@ deriveJSON' ''InlineQuery
 
 deriveJSON' ''ChosenInlineResult
 
-deriveJSON' ''AnswerInlineRequest
+deriveJSON' ''AnswerInlineResponse
 
 deriveJSON' ''InlineQueryResult
 
