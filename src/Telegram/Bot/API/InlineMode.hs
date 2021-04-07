@@ -41,7 +41,7 @@ data InlineQuery
       }
   deriving (Generic, Show)
 
-newtype ChosenInlineResultId = ChosenInlineResultId Int32
+newtype ChosenInlineResultId = ChosenInlineResultId Text
   deriving (Eq, Ord, Show, ToJSON, FromJSON)
 
 -- | Represents a result of an inline query that was chosen by the user and sent to their chat partner.
