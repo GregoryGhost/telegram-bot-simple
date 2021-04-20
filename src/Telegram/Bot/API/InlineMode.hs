@@ -82,7 +82,7 @@ data AnswerInlineResponse
         -- | Pass True, if results may be cached on the server side only for the user that sent the query. By default, results may be returned to any user who sends the same query
         answerInlineResponseIsPersonal :: Maybe Bool,
         -- | Pass the offset that a client should send in the next query with the same text to receive more results. Pass an empty string if there are no more results or if you don't support pagination. Offset length can't exceed 64 bytes.
-        answerInlineResponseNextOffset :: Maybe Int32
+        answerInlineResponseNextOffset :: Maybe Pagination
         -- -- |
         -- answerInlineResponseSwitchPmText :: Maybe Text,
         -- -- |
@@ -135,6 +135,15 @@ data InputTextMessageContent
         --TODO
       }
   deriving (Generic, Show)
+
+data Pagination
+  = Pagination
+      { paginationPage :: Int32,
+        paginationOffset :: Int32
+      }
+  deriving (Show, Generic)
+
+deriveJSON' ''Pagination
 
 deriveJSON' ''InlineQuery
 
