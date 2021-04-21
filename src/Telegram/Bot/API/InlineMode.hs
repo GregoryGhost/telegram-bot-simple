@@ -37,7 +37,7 @@ data InlineQuery
         -- | Text of the query (up to 256 characters).
         inlineQueryQuery :: Text,
         -- | Offset of the results to be returned, can be controlled by the bot.
-        inlineQueryOffset :: Text
+        inlineQueryOffset :: Maybe Pagination
       }
   deriving (Generic, Show)
 
