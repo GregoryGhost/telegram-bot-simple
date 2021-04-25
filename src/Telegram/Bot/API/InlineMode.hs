@@ -37,7 +37,7 @@ data InlineQuery
         -- | Text of the query (up to 256 characters).
         inlineQueryQuery :: Text,
         -- | Offset of the results to be returned, can be controlled by the bot.
-        inlineQueryOffset :: Maybe Pagination
+        inlineQueryOffset :: Text
       }
   deriving (Generic, Show)
 
@@ -82,7 +82,7 @@ data AnswerInlineResponse
         -- | Pass True, if results may be cached on the server side only for the user that sent the query. By default, results may be returned to any user who sends the same query
         answerInlineResponseIsPersonal :: Maybe Bool,
         -- | Pass the offset that a client should send in the next query with the same text to receive more results. Pass an empty string if there are no more results or if you don't support pagination. Offset length can't exceed 64 bytes.
-        answerInlineResponseNextOffset :: Maybe Pagination
+        answerInlineResponseNextOffset :: Text
         -- -- |
         -- answerInlineResponseSwitchPmText :: Maybe Text,
         -- -- |

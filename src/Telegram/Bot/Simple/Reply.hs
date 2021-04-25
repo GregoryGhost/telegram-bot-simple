@@ -1,5 +1,6 @@
 {-# LANGUAGE DeriveGeneric #-}
 {-# LANGUAGE RecordWildCards #-}
+{-# LANGUAGE OverloadedStrings #-}
 
 module Telegram.Bot.Simple.Reply where
 
@@ -163,7 +164,7 @@ toAnswerInlineQuery queryId answers =
       answerInlineResponseResults = answers,
       answerInlineResponseCacheTime = Nothing,
       answerInlineResponseIsPersonal = Nothing,
-      answerInlineResponseNextOffset = Nothing
+      answerInlineResponseNextOffset = ""
     }
 
 currentInlineQueryId :: BotM (Maybe InlineQueryId)
